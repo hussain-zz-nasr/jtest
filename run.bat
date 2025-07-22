@@ -1,3 +1,4 @@
 @echo off
 cd /d C:\Users\User\y
-cmd /k "npm run dev"
+start "" cmd /c "npm run dev"
+exit /b 0
