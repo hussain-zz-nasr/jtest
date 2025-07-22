@@ -18,7 +18,7 @@ import CustomerTable from './components/customer/CustomerTable';
 import SearchField from './components/customer/searchfield';
 
 type Customer = {
-  id: string;
+  id: string; 
   name: string;
   number: string;
   email: string;
