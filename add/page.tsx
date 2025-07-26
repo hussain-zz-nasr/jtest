@@ -31,9 +31,8 @@ export default function AddPage() {
 
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('customers');
-      const customersArray = stored ? JSON.parse(stored) : [];
-
-     
+      stored ? JSON.parse(stored) : [];
+      
         formData.name,
         formData.number,
         formData.email,
@@ -41,7 +40,7 @@ export default function AddPage() {
       
 
       console.log(formData);
-      const response = await  axios.post('http://localhost:5082/api/Customers', formData);
+      await  axios.post('http://localhost:5082/api/Customers', formData);
       router.push('/');
     }
   };
