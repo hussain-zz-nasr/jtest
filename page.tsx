@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from './components/UI/button';
@@ -18,14 +19,16 @@ import CustomerTable from './components/customer/CustomerTable';
 import SearchField from './components/customer/searchfield';
 
 type Customer = {
-  id: string; 
+  id: string;
   name: string;
   number: string;
   email: string;
   address: string;
 };
 
-export default function Home() {
+import { Suspense } from 'react';
+
+function HomeClient() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +48,6 @@ export default function Home() {
         const response = await axios.get(
           `http://localhost:5082/api/Customers?page=${currentPage}&pageSize=${pageSize}`
         );
-
         const { customers, totalPages } = response.data;
         setCustomers(customers);
         setTotalPages(totalPages);
@@ -57,8 +59,6 @@ export default function Home() {
     fetchCustomers();
   }, [currentPage]);
 
-  // Filter customers on all fetched pages (but only current page is fetched, so search is limited to current page)
-  // If you want full search across all pages, you need to implement backend search API or fetch all data at once.
   const filteredCustomers = customers.filter((customer) =>
     Object.values(customer).some(
       (field) =>
@@ -71,27 +71,23 @@ export default function Home() {
     setCurrentPage(page);
     router.push(`/?page=${page}`);
   };
- 
+
   return (
     <>
       <div className="flex w-full flex-wrap items-end justify-between gap-4 border-b border-zinc-950/10 pb-6 dark:border-white/10">
-        <Heading>Customer List Test Rebuild auto here ................</Heading>
+        <Heading>Customer List</Heading>
         <Divider />
 
         <div className="flex gap-4">
           <SearchField value={search} onChange={setSearch} />
-
           <Button outline>
             <Link href="/add">Add</Link>
           </Button>
         </div>
-        <br />
       </div>
 
-      {/* Pass filteredCustomers here */}
       <CustomerTable customers={filteredCustomers} />
 
-      {/* Pagination Section */}
       <Pagination>
         <PaginationPrevious
           href={`?page=${currentPage - 1}`}
@@ -150,4 +146,11 @@ export default function Home() {
     </>
   );
 }
-  
+
+export default function Page() {
+  return (
+    <Suspense>
+      <HomeClient />
+    </Suspense>
+  );
+}

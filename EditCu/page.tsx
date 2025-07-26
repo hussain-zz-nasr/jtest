@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '../components/UI/input';
 import { Divider } from '../components/UI/divider';
@@ -9,7 +9,7 @@ import { Heading } from '../components/UI/heading';
 import Link from 'next/link';
 import axios from 'axios';
 
-export default function EditPage() {
+function EditPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -123,5 +123,13 @@ export default function EditPage() {
         </Button>
       </div>
     </>
+  );
+}
+
+export default function EditPage() {
+  return (
+    <Suspense>
+      <EditPageInner />
+    </Suspense>
   );
 }

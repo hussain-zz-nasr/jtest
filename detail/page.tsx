@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Input } from '../components/UI/input';
 import { Divider } from '../components/UI/divider';
@@ -9,7 +9,9 @@ import { Heading } from '../components/UI/heading';
 import Link from 'next/link';
 import axios from 'axios';
 
-export default function DetailsPage() {
+
+
+function DetailsPageInner() {
   const searchParams = useSearchParams();
 
   const [customerData, setCustomerData] = useState({
@@ -87,5 +89,13 @@ export default function DetailsPage() {
         </Button>
       </div>
     </>
+  );
+}
+
+export default function DetailsPage() {
+  return (
+    <Suspense>
+      <DetailsPageInner />
+    </Suspense>
   );
 }
